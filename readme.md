@@ -1,1 +1,1 @@
-The crowdfunding website built on flow - Bring projects to life.
+The crowdfunding for you built on flow - Bring projects to life.
