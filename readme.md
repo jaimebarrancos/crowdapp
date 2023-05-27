@@ -1,2 +1,1 @@
-First upload
-Github working!
+The crowdfunding website built on flow - Bring projects to life.
