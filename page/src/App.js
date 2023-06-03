@@ -9,6 +9,7 @@ function App() {
       <Navbar />
       <h1>Mint Your Dog!</h1>
       <MintComponent />
+      <ShowNfts />
     </div>
   );
 }
