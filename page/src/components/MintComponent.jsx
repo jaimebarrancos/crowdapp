@@ -43,7 +43,7 @@ const Wrapper = styled.div`
 `;
 
 function MintComponent() {
-  async function mintNFT(type, url, randomNumber) {
+  async function mintNFT(type, url, randomNumber, timeStamp) {
     try {
       const res = await fcl.mutate({
         cadence: `
@@ -51,7 +51,7 @@ function MintComponent() {
             import NonFungibleToken from 0xf8d6e0586b0a20c7
             import MetadataViews from 0xf8d6e0586b0a20c7
 
-            transaction(type: String, url: String, randomNumber: String, timeStamp: String){
+            transaction(type: String, url: String, randomNumber: String, timeStamp: UFix64){
                 let recipientCollection: &FlowTutorialMint.Collection{NonFungibleToken.CollectionPublic}
 
                 prepare(signer: AuthAccount){
@@ -73,6 +73,7 @@ function MintComponent() {
           arg(type, t.String),
           arg(url, t.String),
           arg(randomNumber, t.String),
+          arg(1125867793.1, t.UFix64),
         ],
         limit: 9999,
       });
@@ -121,7 +122,9 @@ function MintComponent() {
             onClick={() =>
               mintNFT(
                 "Swag Dog",
-                "https://images.unsplash.com/photo-1517423568366-8b83523034fd"
+                "https://images.unsplash.com/photo-1517423568366-8b83523034fd",
+                "somethin",
+                1685867793
               )
             }
           >
@@ -140,7 +143,8 @@ function MintComponent() {
               mintNFT(
                 "French Dog",
                 "https://images.unsplash.com/photo-1517519014922-8fc06b814a0e",
-                "27"
+                "27",
+                1685879356160
               )
             }
           >

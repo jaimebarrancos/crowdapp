@@ -18,31 +18,37 @@ pub contract FlowTutorialMint: NonFungibleToken {
         pub let type: String
         pub let url: String
         pub let randomNumber: String
+        pub let timeStamp: UFix64
 
-        init(_id: UInt64, _type: String, _url: String, _randomNumber: String){
+        init(_id: UInt64, _type: String, _url: String, _randomNumber: String, _timeStamp:UFix64){
             self.id = _id
             self.type = _type
             self.url = _url
             self.randomNumber = _randomNumber
+            self.timeStamp = _timeStamp
         }
     }
 
+    
     pub resource NFT: NonFungibleToken.INFT, MetadataViews.Resolver {
         pub let id: UInt64
         pub let type: String
         pub let url: String
         pub let randomNumber: String
+        pub let timeStamp: UFix64
     
         init(
             id: UInt64,
             type: String,
             url: String,
-            randomNumber: String
+            randomNumber: String,
+            timeStamp: UFix64
         ) {
             self.id = id
             self.type = type
             self.url = url
             self.randomNumber = randomNumber
+            self.timeStamp = timeStamp
         }
     
         pub fun getViews(): [Type] {
@@ -56,7 +62,8 @@ pub contract FlowTutorialMint: NonFungibleToken {
                     _id: self.id,
                     _type: self.type,
                     _url: self.url,
-                    _randomNumber: self.randomNumber
+                    _randomNumber: self.randomNumber,
+                    _timeStamp: self.timeStamp
                 )
             }
             return nil
@@ -145,19 +152,29 @@ pub contract FlowTutorialMint: NonFungibleToken {
         return <- create Collection()
     }
 
+
+
+
      pub fun mintNFT(
             recipient: &{NonFungibleToken.CollectionPublic},
             type: String,
             url: String,
-            randomNumber: String
+            randomNumber: String,
+            timeStamp: UFix64
         ) {
 
+            
+        fun getCurrentTimestamp(): UFix64 {
+            let block = getCurrentBlock()
+            return block.timestamp
+        }
             // create a new NFT
             var newNFT <- create NFT(
                 id: FlowTutorialMint.totalSupply,
                 type: type,
                 url: url,
-                randomNumber: randomNumber
+                randomNumber: randomNumber,
+                timeStamp: getCurrentTimestamp()
             )
 
             // deposit it in the recipient's account using their reference
@@ -165,6 +182,7 @@ pub contract FlowTutorialMint: NonFungibleToken {
 
             FlowTutorialMint.totalSupply = FlowTutorialMint.totalSupply + UInt64(1)
         }
+
 
     init() {
         // Initialize the total supply

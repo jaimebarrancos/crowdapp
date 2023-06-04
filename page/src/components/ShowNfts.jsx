@@ -52,13 +52,14 @@ const Wrapper = styled.div`
 
 export default function ShowNfts() {
   const [nfts, setNfts] = useState([]);
+
   const [user, setUser] = useState({ loggedIn: false, addr: undefined });
   let counter = 0;
   useEffect(() => {
     fcl.currentUser.subscribe(setUser);
     getNFTs("0x211a69734d329807");
     counter += 1;
-    console.log("ran " + counter + " times");
+    console.log("NFT GARBAGE " + nfts + " times");
   }, [user.addr]);
 
   async function getNFTs(addr) {
@@ -92,6 +93,7 @@ export default function ShowNfts() {
         args: (arg, t) => [arg(addr, t.Address)], // arg(argument, t.type)
       });
       setNfts(result);
+
       console.log(result);
     } catch (error) {
       console.log("err", error);
@@ -111,7 +113,27 @@ export default function ShowNfts() {
                 <p>{nft.type}</p>
                 <p>Unique number: {nft.id}</p>
                 <p>Your number: {nft.randomNumber}</p> {/*timestamp*/}
-                <p>your date: {new Date(1685867793).toString()}</p>
+                <p>
+                  {(() => {
+                    console.log("the innitial timeStamp", nft.timeStamp);
+
+                    var epochDate = Math.round(nft.timeStamp * 1000);
+                    /*let options = {
+                      hours: "numeric",
+                      minutes: "numeric",
+                      year: "numeric",
+                      month: "numeric",
+                      day: "numeric",
+                    };
+
+                    return new Date(epochDate)
+                      .toLocaleDateString("en-US", options)
+                      .toString();
+                      */
+                    // take this out:
+                    return new Date(epochDate).toString();
+                  })()}
+                </p>
               </div>
             );
           })}
