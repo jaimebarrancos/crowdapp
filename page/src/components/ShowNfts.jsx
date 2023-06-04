@@ -65,11 +65,11 @@ export default function ShowNfts() {
     try {
       const result = await fcl.query({
         cadence: `
-                import FlowTutorialMint from 0x8e0dac5df6e8489e
-                import MetadataViews from 0x631e88ae7f1d7c20
+                import FlowTutorialMint from 0xf8d6e0586b0a20c7
+                import MetadataViews from 0xf8d6e0586b0a20c7
                 
                 pub fun main(address: Address): [FlowTutorialMint.FlowTutorialMintData] {
-                  let collection = getAccount(address).getCapability(FlowTutorialMint.CollectionPublicPath)
+                  let collection = getAccount(0xf8d6e0586b0a20c7).getCapability(FlowTutorialMint.CollectionPublicPath)
                                     .borrow<&{MetadataViews.ResolverCollection}>()
                                     ?? panic("Could not borrow a reference to the nft collection")
                 
@@ -89,7 +89,7 @@ export default function ShowNfts() {
                   return answer
                 }
                 `,
-        args: (arg, t) => [arg(addr, t.Address)],
+        args: (arg, t) => [arg(addr, t.Address)], // arg(argument, t.type)
       });
       setNfts(result);
       console.log(result);
@@ -108,9 +108,10 @@ export default function ShowNfts() {
             return (
               <div key={index} className="nftDiv">
                 <img src={nft.url} alt="nft" />
-                <p>Type: {nft.type}</p>
-                <p>Id: {nft.id}</p>
-                <p>Your number: {nft.randomNumber}</p>
+                <p>{nft.type}</p>
+                <p>Unique number: {nft.id}</p>
+                <p>Your number: {nft.randomNumber}</p> {/*timestamp*/}
+                <p>your date: {new Date(1685867793).toString()}</p>
               </div>
             );
           })}

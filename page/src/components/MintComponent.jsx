@@ -47,11 +47,11 @@ function MintComponent() {
     try {
       const res = await fcl.mutate({
         cadence: `
-            import FlowTutorialMint from 0x8e0dac5df6e8489e
-            import NonFungibleToken from 0x631e88ae7f1d7c20
-            import MetadataViews from 0x631e88ae7f1d7c20
+            import FlowTutorialMint from 0xf8d6e0586b0a20c7
+            import NonFungibleToken from 0xf8d6e0586b0a20c7
+            import MetadataViews from 0xf8d6e0586b0a20c7
 
-            transaction(type: String, url: String, randomNumber: String){
+            transaction(type: String, url: String, randomNumber: String, timeStamp: String){
                 let recipientCollection: &FlowTutorialMint.Collection{NonFungibleToken.CollectionPublic}
 
                 prepare(signer: AuthAccount){
@@ -65,7 +65,7 @@ function MintComponent() {
                                             .borrow<&FlowTutorialMint.Collection{NonFungibleToken.CollectionPublic}>()!
                 }
                 execute{
-                    FlowTutorialMint.mintNFT(recipient: self.recipientCollection, type: type, url: url, randomNumber: randomNumber)
+                    FlowTutorialMint.mintNFT(recipient: self.recipientCollection, type: type, url: url, randomNumber: randomNumber, timeStamp: timeStamp)
                 }
             }
             `,
