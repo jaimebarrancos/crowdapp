@@ -73,7 +73,7 @@ function MintComponent() {
           arg(type, t.String),
           arg(url, t.String),
           arg(randomNumber, t.String),
-          arg(1125867793.1, t.UFix64),
+          arg(1125867793.1, t.UFix64), //doesn't matter what you put here, the time stamp is calculated on-chain
         ],
         limit: 9999,
       });

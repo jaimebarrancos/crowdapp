@@ -2,16 +2,17 @@ import * as fcl from "@onflow/fcl";
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 import "../flow/config";
+import { BrowserRouter, Route, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Wrapper = styled.nav`
   width: -webkit-fill-available;
   background-color: #8dfe89;
-  position: fixed;
   top: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 50px;
+  padding: 0.2em 1em;
 
   button {
     background-color: white;
@@ -80,6 +81,13 @@ function Navbar() {
   return (
     <Wrapper>
       <h1>Flow Tutorial Mint</h1>
+      <Link to="/publish">
+        <button>Publish</button>
+      </Link>
+      <Link to="/">
+        <button>Home</button>
+      </Link>
+
       {user.loggedIn ? (
         <div>
           <button onClick={() => logOut()}>Logout</button>
