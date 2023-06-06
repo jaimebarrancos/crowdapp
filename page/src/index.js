@@ -5,6 +5,7 @@ import "./index.css";
 import App from "./App";
 import CreateProject from "./components/CreateProject";
 import Navbar from "./components/Navbar.jsx";
+import ShowNfts from "./components/UserNfts.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -13,6 +14,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/publish" element={<CreateProject />} />
+        <Route path="/contributions" element={<ShowNfts />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

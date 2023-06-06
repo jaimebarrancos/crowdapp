@@ -7,8 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 const Wrapper = styled.nav`
   width: -webkit-fill-available;
-  background-color: #8dfe89;
-  top: 0;
+  background-color: #d8ccff;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -16,10 +15,9 @@ const Wrapper = styled.nav`
 
   button {
     background-color: white;
-    padding: 5px 40px;
-    max-width: 200px;
+    padding: 0.3em 2em;
     border: none;
-    border-radius: 20px;
+    border-radius: 0.5em;
     font-size: 18px;
     height: 50px;
 
@@ -80,12 +78,15 @@ function Navbar() {
   }
   return (
     <Wrapper>
-      <h1>Flow Tutorial Mint</h1>
-      <Link to="/publish">
-        <button>Publish</button>
-      </Link>
+      <h1>Crowdapp</h1>
       <Link to="/">
         <button>Home</button>
+      </Link>
+      <Link to="/contributions">
+        <button>Your contributions</button>
+      </Link>
+      <Link to="/publish">
+        <button>Publish</button>
       </Link>
 
       {user.loggedIn ? (

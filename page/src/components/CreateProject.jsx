@@ -164,7 +164,9 @@ const StyledForm = styled.div`
 `;
 
 function CreateProject() {
-  const [projectName, setProjectName] = useState(""); // Declare a state variable...
+  const [projectName, setProjectName] = useState("");
+  const [shortDescription, setShortDescription] = useState("");
+  const [description, setDescription] = useState("");
 
   async function mintNFT(type, url, randomNumber, timeStamp) {
     try {
@@ -241,14 +243,16 @@ function CreateProject() {
             </div>
 
             <div class="formbold-mb-3">
-              <label for="address2" class="formbold-form-label">
+              <label for="shortdescription" class="formbold-form-label">
                 Short description
               </label>
               <input
                 type="text"
-                name="address2"
-                id="address2"
+                name="shortdescription"
+                id="shortdescription"
                 class="formbold-form-input"
+                value={shortDescription}
+                onChange={(e) => setShortDescription(e.target.value)}
               />
             </div>
 
@@ -257,10 +261,12 @@ function CreateProject() {
                 Description
               </label>
               <textarea
-                type="email"
-                name="email"
-                id="email"
+                type="text"
+                name="description"
+                id="description"
                 class="formbold-form-input-description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
               ></textarea>
             </div>
             <div class="formbold-checkbox-wrapper">
@@ -297,9 +303,9 @@ function CreateProject() {
                 class="formbold-btn"
                 onClick={() =>
                   mintNFT(
-                    "234",
-                    "https://images.unsplash.com/photo-1517423568366-8b83523034fd",
-                    "somethin",
+                    projectName,
+                    "https://images.unsplash.com/photo-1597733336794-12d05021d510?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80",
+                    shortDescription,
                     1685867793
                   )
                 }

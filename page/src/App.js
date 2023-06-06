@@ -1,14 +1,12 @@
 import "./App.css";
 
 import MintComponent from "./components/MintComponent.jsx";
-import ShowNfts from "./components/ShowNfts";
+import AllNfts from "./components/AllNfts";
 
 function App() {
   return (
     <div className="App">
-      <h1>Mint Your Dog!</h1>
-      <MintComponent />
-      <ShowNfts />
+      <AllNfts />
     </div>
   );
 }

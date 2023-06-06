@@ -96,7 +96,7 @@ function MintComponent() {
       <main>
         <div>
           <img
-            src="https://images.unsplash.com/photo-1517849845537-4d257902454a"
+            src="https://images.unsplash.com/photo-1597733336794-12d05021d510?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80"
             alt="Mad Dog"
           />
           <h3>Mad Dog</h3>
@@ -104,7 +104,7 @@ function MintComponent() {
             onClick={() =>
               mintNFT(
                 "Mad Dog",
-                "https://images.unsplash.com/photo-1517849845537-4d257902454a"
+                "https://images.unsplash.com/photo-1597733336794-12d05021d510?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80"
               )
             }
           >
