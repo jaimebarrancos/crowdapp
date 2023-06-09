@@ -168,43 +168,45 @@ function CreateProject() {
   const [shortDescription, setShortDescription] = useState("");
   const [description, setDescription] = useState("");
 
-  async function mintNFT(type, url, randomNumber, timeStamp) {
+  async function mintNFT(type, url, motto, timeStamp, description, fundAmount) {
     try {
       const res = await fcl.mutate({
         cadence: `
-                import FlowTutorialMint from 0xf8d6e0586b0a20c7
-                import NonFungibleToken from 0xf8d6e0586b0a20c7
-                import MetadataViews from 0xf8d6e0586b0a20c7
+    import FlowTutorialMint from 0xf8d6e0586b0a20c7
+    import NonFungibleToken from 0xf8d6e0586b0a20c7
+    import MetadataViews from 0xf8d6e0586b0a20c7
     
-                transaction(type: String, url: String, randomNumber: String, timeStamp: UFix64){
-                    let recipientCollection: &FlowTutorialMint.Collection{NonFungibleToken.CollectionPublic}
-    
-                    prepare(signer: AuthAccount){
-                        
-                    if signer.borrow<&FlowTutorialMint.Collection>(from: FlowTutorialMint.CollectionStoragePath) == nil {
-                    signer.save(<- FlowTutorialMint.createEmptyCollection(), to: FlowTutorialMint.CollectionStoragePath)
-                    signer.link<&FlowTutorialMint.Collection{NonFungibleToken.CollectionPublic, MetadataViews.ResolverCollection}>(FlowTutorialMint.CollectionPublicPath, target: FlowTutorialMint.CollectionStoragePath)
-                    }
-    
-                    self.recipientCollection = signer.getCapability(FlowTutorialMint.CollectionPublicPath)
-                                                .borrow<&FlowTutorialMint.Collection{NonFungibleToken.CollectionPublic}>()!
-                    }
-                    execute{
-                        FlowTutorialMint.mintNFT(recipient: self.recipientCollection, type: type, url: url, randomNumber: randomNumber, timeStamp: timeStamp)
-                    }
-                }
-                `,
+    transaction(type: String, url: String, motto: String, timeStamp: UFix64, description: String, fundAmount: Int){
+        let recipientCollection: &FlowTutorialMint.Collection{NonFungibleToken.CollectionPublic}
+
+        prepare(signer: AuthAccount){
+
+        if signer.borrow<&FlowTutorialMint.Collection>(from: FlowTutorialMint.CollectionStoragePath) == nil {
+        signer.save(<- FlowTutorialMint.createEmptyCollection(), to: FlowTutorialMint.CollectionStoragePath)
+        signer.link<&FlowTutorialMint.Collection{NonFungibleToken.CollectionPublic, MetadataViews.ResolverCollection}>(FlowTutorialMint.CollectionPublicPath, target: FlowTutorialMint.CollectionStoragePath)
+        }
+
+        self.recipientCollection = signer.getCapability(FlowTutorialMint.CollectionPublicPath)
+                                    .borrow<&FlowTutorialMint.Collection{NonFungibleToken.CollectionPublic}>()!
+        }
+        execute{
+            FlowTutorialMint.mintNFT(recipient: self.recipientCollection, type: type, url: url, motto: motto, timeStamp: timeStamp, description: description, fundAmount: fundAmount)
+        }
+    }
+                    `,
         args: (arg, t) => [
           arg(type, t.String),
           arg(url, t.String),
-          arg(randomNumber, t.String),
+          arg(motto, t.String),
           arg(1125867793.1, t.UFix64), //doesn't matter what you put here, the time stamp is calculated on-chain
+          arg(description, t.String),
+          arg(fundAmount, t.Int),
         ],
         limit: 9999,
       });
       fcl.tx(res).subscribe((res) => {
         if (res.status === 4 && res.errorMessage === "") {
-          window.alert("NFT Minted!");
+          window.alert("Project successfully published!");
           window.location.reload(false);
         }
       });
@@ -222,10 +224,6 @@ function CreateProject() {
           <form action="https://formbold.com/s/FORM_ID" method="POST">
             <div class="formbold-form-title">
               <h2 class="">Publish your project!</h2>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt.
-              </p>
             </div>
 
             <div class="formbold-mb-3">
@@ -298,7 +296,7 @@ function CreateProject() {
                 <a href="#"> terms and conditions.</a>
               </label>
             </div>
-            <Link to="/">
+            <Link to="/publish">
               <button
                 class="formbold-btn"
                 onClick={() =>
@@ -306,14 +304,15 @@ function CreateProject() {
                     projectName,
                     "https://images.unsplash.com/photo-1597733336794-12d05021d510?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80",
                     shortDescription,
-                    1685867793
+                    1685867793,
+                    "description that wont show up",
+                    0
                   )
                 }
               >
                 Publish
               </button>
             </Link>
-            <button onClick={console.log("textContent")}>PRINT BUTTON</button>
           </form>
         </div>
       </div>

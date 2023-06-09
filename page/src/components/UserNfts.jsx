@@ -58,16 +58,16 @@ export default function UserNfts() {
 
   return (
     <div className="wrapper">
-      <h1>My NFTs</h1>
+      <h1>Your NFTs and your projects</h1>
       <section>
         {nfts.map((nft, index) => {
           return (
             <div key={index} className="nftDiv">
               <img src={nft.url} alt="nft" />
-              <div className="nftText">
+              <div key={index} className="nftText">
                 <p>{nft.type}</p>
                 <p>{nft.id}</p>
-                <p>{nft.randomNumber}</p> {/*timestamp*/}
+                <p>{nft.motto}</p> {/*timestamp*/}
                 <p>
                   {(() => {
                     console.log("the innitial timeStamp", nft.timeStamp);

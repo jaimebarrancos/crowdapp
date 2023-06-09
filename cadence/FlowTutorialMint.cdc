@@ -4,6 +4,13 @@ import MetadataViews from "./MetadataViews.cdc"
 pub contract FlowTutorialMint: NonFungibleToken {
 
     pub var totalSupply: UInt64
+    pub var description: String
+    pub var nftOwner: Address
+    pub var typeMother: String
+    pub var urlMother: String
+    pub var mottoMother: String
+    pub var timeStampMother: UFix64
+    pub var firstNftCreated: Bool
 
     pub event ContractInitialized()
     pub event Withdraw(id: UInt64, from: Address?)
@@ -13,44 +20,59 @@ pub contract FlowTutorialMint: NonFungibleToken {
     pub let CollectionPublicPath: PublicPath
     pub let MinterStoragePath: StoragePath
 
+
     pub struct FlowTutorialMintData{
         pub let id: UInt64
         pub let type: String
         pub let url: String
-        pub let randomNumber: String
+        pub let motto: String
         pub let timeStamp: UFix64
+        pub var description: String
+        pub var fundAmount: Int
 
-        init(_id: UInt64, _type: String, _url: String, _randomNumber: String, _timeStamp:UFix64){
+
+        init(_id: UInt64, _type: String, _url: String, _motto: String, _timeStamp:UFix64, _description: String, _fundAmount: Int){
             self.id = _id
             self.type = _type
             self.url = _url
-            self.randomNumber = _randomNumber
+            self.motto = _motto
             self.timeStamp = _timeStamp
+            self.description = _description
+            self.fundAmount = _fundAmount
+
+            
         }
     }
 
-    
+
     pub resource NFT: NonFungibleToken.INFT, MetadataViews.Resolver {
         pub let id: UInt64
         pub let type: String
         pub let url: String
-        pub let randomNumber: String
+        pub let motto: String
         pub let timeStamp: UFix64
+        pub let description: String
+        pub let fundAmount: Int
     
         init(
             id: UInt64,
             type: String,
             url: String,
-            randomNumber: String,
-            timeStamp: UFix64
+            motto: String,
+            timeStamp: UFix64,
+            description: String,
+            fundAmount: Int
         ) {
             self.id = id
             self.type = type
             self.url = url
-            self.randomNumber = randomNumber
+            self.motto = motto
             self.timeStamp = timeStamp
+            self.description = description
+            self.fundAmount = fundAmount
         }
-    
+        
+
         pub fun getViews(): [Type] {
             return [ Type<FlowTutorialMintData>() ]
         }
@@ -62,8 +84,10 @@ pub contract FlowTutorialMint: NonFungibleToken {
                     _id: self.id,
                     _type: self.type,
                     _url: self.url,
-                    _randomNumber: self.randomNumber,
-                    _timeStamp: self.timeStamp
+                    _motto: self.motto,
+                    _timeStamp: self.timeStamp,
+                    _description: self.description,
+                    _fundAmount: self.fundAmount
                 )
             }
             return nil
@@ -152,15 +176,14 @@ pub contract FlowTutorialMint: NonFungibleToken {
         return <- create Collection()
     }
 
-
-
-
-     pub fun mintNFT(
+    pub fun mintNFT(
             recipient: &{NonFungibleToken.CollectionPublic},
             type: String,
             url: String,
-            randomNumber: String,
-            timeStamp: UFix64
+            motto: String,
+            timeStamp: UFix64,
+            description: String,
+            fundAmount: Int
         ) {
 
             
@@ -168,25 +191,50 @@ pub contract FlowTutorialMint: NonFungibleToken {
             let block = getCurrentBlock()
             return block.timestamp
         }
-            // create a new NFT
-            var newNFT <- create NFT(
-                id: FlowTutorialMint.totalSupply,
-                type: type,
-                url: url,
-                randomNumber: randomNumber,
-                timeStamp: getCurrentTimestamp()
-            )
 
-            // deposit it in the recipient's account using their reference
-            recipient.deposit(token: <-newNFT)
-
-            FlowTutorialMint.totalSupply = FlowTutorialMint.totalSupply + UInt64(1)
+        //only executes 1 time
+        if (self.firstNftCreated == false) {
+            self.firstNftCreated = true
+            //set standard values
+            self.typeMother = type
+            self.urlMother = url
+            self.mottoMother = motto
         }
+
+
+        var newNFT <- create NFT(
+            //should have same NFT parameters but uses none after 1st time
+            id: FlowTutorialMint.totalSupply,
+            type: self.typeMother,
+            url: self.urlMother,
+            motto: self.mottoMother,
+            timeStamp: getCurrentTimestamp(),
+            description: "This is the project description !",
+            //funder NFT parameters
+            fundAmount: fundAmount
+        ) 
+
+
+        // deposit it in the recipient's account using their reference
+        recipient.deposit(token: <-newNFT)
+
+        FlowTutorialMint.totalSupply = FlowTutorialMint.totalSupply + UInt64(1)
+    }
 
 
     init() {
         // Initialize the total supply
         self.totalSupply = 0
+        self.nftOwner = FlowTutorialMint.account.address
+
+        self.description = ""
+
+        //1st NFT to be copied / followed by others
+        self.typeMother = ""
+        self.urlMother = ""
+        self.mottoMother = ""
+        self.timeStampMother = 0.0
+        self.firstNftCreated = false
 
         // Set the named paths
         self.CollectionStoragePath = /storage/flowTutorialMintCollection

@@ -14,8 +14,10 @@ const Wrapper = styled.nav`
   padding: 0.2em 1em;
 
   button {
+    width: 10em;
+
+    text-align: center;
     background-color: white;
-    padding: 0.3em 2em;
     border: none;
     border-radius: 0.5em;
     font-size: 18px;
