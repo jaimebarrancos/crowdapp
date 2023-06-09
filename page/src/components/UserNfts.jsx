@@ -89,6 +89,7 @@ export default function UserNfts() {
                     return new Date(epochDate).toString();
                   })()}
                 </p>
+                <p>{nft.fundAmount} flow</p>
               </div>
             </div>
           );

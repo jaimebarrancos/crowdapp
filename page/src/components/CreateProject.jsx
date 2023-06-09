@@ -176,7 +176,7 @@ function CreateProject() {
     import NonFungibleToken from 0xf8d6e0586b0a20c7
     import MetadataViews from 0xf8d6e0586b0a20c7
     
-    transaction(type: String, url: String, motto: String, timeStamp: UFix64, description: String, fundAmount: Int){
+    transaction(type: String, url: String, motto: String, timeStamp: UFix64, description: String, fundAmount: UFix64){
         let recipientCollection: &FlowTutorialMint.Collection{NonFungibleToken.CollectionPublic}
 
         prepare(signer: AuthAccount){
@@ -200,7 +200,7 @@ function CreateProject() {
           arg(motto, t.String),
           arg(1125867793.1, t.UFix64), //doesn't matter what you put here, the time stamp is calculated on-chain
           arg(description, t.String),
-          arg(fundAmount, t.Int),
+          arg(0.0001, t.UFix64),
         ],
         limit: 9999,
       });

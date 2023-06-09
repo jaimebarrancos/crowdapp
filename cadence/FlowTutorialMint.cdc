@@ -28,10 +28,10 @@ pub contract FlowTutorialMint: NonFungibleToken {
         pub let motto: String
         pub let timeStamp: UFix64
         pub var description: String
-        pub var fundAmount: Int
+        pub var fundAmount: UFix64
 
 
-        init(_id: UInt64, _type: String, _url: String, _motto: String, _timeStamp:UFix64, _description: String, _fundAmount: Int){
+        init(_id: UInt64, _type: String, _url: String, _motto: String, _timeStamp:UFix64, _description: String, _fundAmount: UFix64){
             self.id = _id
             self.type = _type
             self.url = _url
@@ -52,7 +52,7 @@ pub contract FlowTutorialMint: NonFungibleToken {
         pub let motto: String
         pub let timeStamp: UFix64
         pub let description: String
-        pub let fundAmount: Int
+        pub let fundAmount: UFix64
     
         init(
             id: UInt64,
@@ -61,7 +61,7 @@ pub contract FlowTutorialMint: NonFungibleToken {
             motto: String,
             timeStamp: UFix64,
             description: String,
-            fundAmount: Int
+            fundAmount: UFix64
         ) {
             self.id = id
             self.type = type
@@ -183,7 +183,7 @@ pub contract FlowTutorialMint: NonFungibleToken {
             motto: String,
             timeStamp: UFix64,
             description: String,
-            fundAmount: Int
+            fundAmount: UFix64
         ) {
 
             

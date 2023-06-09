@@ -105,7 +105,7 @@ export default function AllNfts() {
 
   async function fundProject() {
     console.log("FUNDED YEY", fundAmount);
-    mintNFT("a", "b", "c", 1.0, "d", 20);
+    mintNFT("a", "b", "c", 1.0, "d", fundAmount);
     //create NFT and put fundAmount as paramater
   }
   async function mintNFT(type, url, motto, timeStamp, description, fundAmount) {
@@ -118,18 +118,34 @@ export default function AllNfts() {
         import FlowToken from 0x0ae53cb6e3f42a79
         import FungibleToken from 0xee82856bf20e2aa6
 
-        transaction(type: String, url: String, motto: String, timeStamp: UFix64, description: String, fundAmount: Int){
+        transaction(type: String, url: String, motto: String, timeStamp: UFix64, description: String, fundAmount: UFix64){
             let recipientCollection: &FlowTutorialMint.Collection{NonFungibleToken.CollectionPublic}
 
             prepare(signer: AuthAccount){
 
             if signer.borrow<&FlowTutorialMint.Collection>(from: FlowTutorialMint.CollectionStoragePath) == nil {
-            signer.save(<- FlowTutorialMint.createEmptyCollection(), to: FlowTutorialMint.CollectionStoragePath)
-            signer.link<&FlowTutorialMint.Collection{NonFungibleToken.CollectionPublic, MetadataViews.ResolverCollection}>(FlowTutorialMint.CollectionPublicPath, target: FlowTutorialMint.CollectionStoragePath)
+              signer.save(<- FlowTutorialMint.createEmptyCollection(), to: FlowTutorialMint.CollectionStoragePath)
+              signer.link<&FlowTutorialMint.Collection{NonFungibleToken.CollectionPublic, MetadataViews.ResolverCollection}>(FlowTutorialMint.CollectionPublicPath, target: FlowTutorialMint.CollectionStoragePath)
             }
 
             self.recipientCollection = signer.getCapability(FlowTutorialMint.CollectionPublicPath)
                                         .borrow<&FlowTutorialMint.Collection{NonFungibleToken.CollectionPublic}>()!
+            
+            //
+            //tranfer tokens
+            //
+            //
+            let signerVaultRef = signer.borrow<&FlowToken.Vault>(from: /storage/flowTokenVault)
+            ?? panic("Could not borrow a reference to the signer's vault")
+
+            let tempVault <- signerVaultRef.withdraw(amount:ufix64Value)
+            //let recipient = getAccount(0xf8d6e0586b0a20c7)
+            let receiverVault = signer
+              .getCapability(/public/flowTokenReceiver)
+              .borrow<&{FungibleToken.Receiver}>()
+              ?? panic("Could not borrow receiver reference to the recipient's Vault")
+
+            receiverVault.deposit(from: <-tempVault)
             }
             execute{
                 FlowTutorialMint.mintNFT(recipient: self.recipientCollection, type: type, url: url, motto: motto, timeStamp: timeStamp, description: description, fundAmount: fundAmount)
@@ -142,13 +158,13 @@ export default function AllNfts() {
           arg(motto, t.String),
           arg(1125867793.1, t.UFix64), //doesn't matter what you put here, the time stamp is calculated on-chain
           arg(description, t.String),
-          arg(fundAmount, t.Int),
+          arg(fundAmount, t.UFix64),
         ],
         limit: 9999,
       });
       fcl.tx(res).subscribe((res) => {
         if (res.status === 4 && res.errorMessage === "") {
-          window.alert("Successefully created NFT!");
+          window.alert("Project successfully published!");
           window.location.reload(false);
         }
       });
@@ -233,7 +249,7 @@ export default function AllNfts() {
                   </p>
                 </div>
                 <div class="fund">
-                  <button onClick={() => fundProject(fundAmount)}>Fund</button>
+                  <button onClick={() => fundProject()}>Fund</button>
                   <input
                     type="value"
                     id="fundButton"
